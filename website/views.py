@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic import ListView
+from .models import Advert
 
-# Create your views here.
+
+class HomePageView(ListView):
+
+    model = Advert
+    template_name = "website/home.html"
