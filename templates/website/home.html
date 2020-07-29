@@ -2,4 +2,27 @@
 
 {% block content %}
 Hello, Sell UA
-{% endblock content %}
+<div class="card-group">
+    {% for advert in advert_list %}
+
+    <div class="card" style="width: 18rem;">
+        <img alt="..." class="card-img-top" src="{{ advert.poster.url }}">
+        <!--    <img alt="..." class="card-img-top" src="C:/Users/volod/PycharmProjects/sell_ua/media/images/1280px-Bull_Terrier_R_01_EoFmMHw.jpg">-->
+        <div class="card-body">
+            <h5 class="card-title">{{ advert.title }}</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                content.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Price: {{advert.price}} hrn</li>
+            <li class="list-group-item">Published: {{ advert.date_published }}</li>
+            <li class="list-group-item">Views: {{ advert.views }}</li>
+        </ul>
+        <div class="card-body">
+            <a class="card-link" href="#">Card link</a>
+            <a class="card-link" href="#">Another link</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% endblock content %}
+</div>
