@@ -1,0 +1,25 @@
+.advert-carousel {
+max-height: 600px;
+}
+
+.advert-carousel img {
+height:auto
+}
+
+.card-img-container {
+   height: 250px;
+   overflow: hidden;
+}
+
+.card-img-container img {
+    height: auto;
+    width: 100%;
+}
+
+.card-spaced {
+margin: 10px 5px;
+}
+
+main.container {
+padding-top: 20px;
+}

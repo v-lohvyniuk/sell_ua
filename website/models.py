@@ -78,7 +78,7 @@ class Advert(models.Model):
 class AdvertPhoto(models.Model):
 
     advert = models.ForeignKey(Advert, verbose_name="Оголошення", on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="images/", verbose_name="Зображення", default='images/default-no-image.png')
+    image = models.ImageField(upload_to="images/", verbose_name="Зображення", default='images/default-no-image.img')
     url = models.SlugField
 
     class Meta:
