@@ -20,6 +20,10 @@ height:auto
 margin: 10px 5px;
 }
 
+.card-body {
+padding-top: 0
+}
+
 main.container {
 padding-top: 20px;
 }
