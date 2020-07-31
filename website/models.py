@@ -1,8 +1,6 @@
 import os
 
-from django.conf import settings
 from django.db import models
-from django.urls import reverse
 
 
 class Category(models.Model):
@@ -54,7 +52,6 @@ class Advert(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Власник")
     date_published = models.DateField("Дата публікації", auto_now=True)
     description = models.TextField("Опис", max_length=1000)
-    poster = models.ImageField("Головне зображення", upload_to="images/", default='images/default-no-image.png')
     price = models.DecimalField("Ціна", decimal_places=2, max_digits=10)
     is_price_final = models.BooleanField(default=False)
     is_draft = models.BooleanField(default=True)
@@ -65,7 +62,13 @@ class Advert(models.Model):
     address = models.ForeignKey(verbose_name="Адреса відправлювача", to=UserAddress, on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_cover_photo(self):
-        return self.advertphoto_set.first().image.url
+        all = self.advertphoto_set.all()
+        if all:
+            if self.advertphoto_set.filter(is_cover_photo=True):
+                return self.advertphoto_set.filter(is_cover_photo=True).get().image.url
+            else:
+                return self.advertphoto_set.first().image.url
+        return ''
 
     def __str__(self):
         return f"{self.title} -  {self.owner} - {self.price}"
@@ -80,6 +83,7 @@ class AdvertPhoto(models.Model):
     advert = models.ForeignKey(Advert, verbose_name="Оголошення", on_delete=models.CASCADE)
     image = models.ImageField(upload_to="images/", verbose_name="Зображення", default='images/default-no-image.img')
     url = models.SlugField
+    is_cover_photo = models.BooleanField("Обкладинка", default=False)
 
     class Meta:
         verbose_name = "Фото оголошення"

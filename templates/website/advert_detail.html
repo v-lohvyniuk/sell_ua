@@ -6,7 +6,7 @@
     <div class="carousel slide" data-ride="carousel" id="carouselExampleControls">
         <div class="carousel-inner advert-carousel">
             <div class="carousel-item active">
-                <img alt="..." class="d-block w-100" src="{{advert.poster.url}}">
+                <img alt="..." class="d-block w-100" src="{{advert.get_cover_photo}}">
             </div>
             {% for image in advert.advertphoto_set.all %}
             <div class="carousel-item">
