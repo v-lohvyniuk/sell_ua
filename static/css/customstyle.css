@@ -7,7 +7,7 @@ height:auto
 }
 
 .card-img-container {
-   height: 250px;
+   height: 220px;
    overflow: hidden;
 }
 
@@ -34,4 +34,37 @@ max-width: 80%
 
 .card-title {
 height: 50px;
+}
+
+body {
+background-color: #E7E7E7;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+     color:black;
+     text-decoration:none;
+     cursor:pointer;
+}
+
+.price-badge {
+font-size: 14pt;
+}
+
+.price-label {
+color: green;
+font-weight: bold;
+font-size: 14pt;
+}
+
+.top-spaced {
+margin-top: 20px;
+}
+
+.advert-heading {
+margin-bottom: 30px;
 }

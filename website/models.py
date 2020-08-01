@@ -70,6 +70,12 @@ class Advert(models.Model):
                 return self.advertphoto_set.first().image.url
         return ''
 
+    def get_advert_address(self):
+        if self.address:
+            return self.address
+        else:
+            return self.owner.useraddress_set.first()
+
     def __str__(self):
         return f"{self.title} -  {self.owner} - {self.price}"
 
