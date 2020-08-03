@@ -50,7 +50,7 @@ class Advert(models.Model):
 
     title = models.CharField("Заголовок", max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Власник")
-    date_published = models.DateField("Дата публікації", auto_now=True)
+    date_published = models.DateTimeField("Дата публікації", auto_now=True)
     description = models.TextField("Опис", max_length=1000)
     price = models.DecimalField("Ціна", decimal_places=2, max_digits=10)
     is_price_final = models.BooleanField(default=False)

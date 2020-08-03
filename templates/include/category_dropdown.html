@@ -1,0 +1,11 @@
+{% if not category.category_set.all %}
+<li><a class="dropdown-item" href="#"> {{ category.name }} </a></li>
+{% else %}
+<li><a class="dropdown-item" href="#"> {{ category.name }} > </a>
+    <ul class="submenu dropdown-menu">
+        {% for categ in category.category_set.all %}
+        {% include 'include/category_dropdown.html' with category=categ %}
+        {% endfor %}
+    </ul>
+</li>
+{% endif %}
