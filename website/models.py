@@ -1,12 +1,15 @@
 import os
 
+from django.conf import settings
 from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
 
     name = models.CharField("Назва", max_length=50)
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
+    url = models.SlugField(max_length=50, default='root')
 
     def __str__(self):
         return self.name
@@ -14,6 +17,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = "Категорія"
         verbose_name_plural = "Категорії"
+
+    def get_url(self):
+        return reverse("category", args=[self.url])
 
 
 class User(models.Model):
