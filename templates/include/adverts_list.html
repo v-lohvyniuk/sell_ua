@@ -1,0 +1,30 @@
+<div class="row">
+    {% for advert in advert_list %}
+
+    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-spaced w-100 " style="width: 18rem;">
+            <div class="card-img-container">
+                {% if advert.get_cover_photo %}
+                <img alt="..." class="card-img-top" src="{{ advert.get_cover_photo }}">
+                {% else %}
+                <img alt="..." class="card-img-top" src="/media/images/default-no-image.jpg">
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="/advert/{{advert.pk}}">{{ advert.title }}</a></h5>
+                <div class="row">
+                    <div class="col-8">
+                        <p class="font-weight-light">{{ advert.date_published }}</p>
+                    </div>
+                    <div class="col-4 text-right">
+                        <span class="badge badge-danger">
+                            Views: <span class="badge badge-light">{{ advert.views }}</span>
+                        </span>
+                    </div>
+                </div>
+                <b>{{advert.price}} грн</b>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

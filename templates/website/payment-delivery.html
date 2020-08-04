@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> Оформлення замовлення </h1>
+<hr/>
+<div class="card">
+    <div class="card-body">
+        Деталі оголошення
+        <hr/>
+        <div class="row">
+            <div class="col-8">
+                <div class="row top-spaced">
+                    <div class="col-md-9">
+                        <dl class="row">
+                            <dt class="col-sm-3">Номер оголошення</dt>
+                            <dd class="col-sm-9">{{advert.pk}}</dd>
+
+                            <dt class="col-sm-3">Продавець</dt>
+                            <dd class="col-sm-9">
+                                {{advert.owner}}
+                            </dd>
+                            <dt class="col-sm-3">Місто</dt>
+                            <dd class="col-sm-9">
+                                {{advert.get_advert_address.city}}
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card-img-container">
+                    {% if advert.get_cover_photo %}
+                    <img alt="..." class="card-img-top" src="{{ advert.get_cover_photo }}">
+                    {% else %}
+                    <img alt="..." class="card-img-top" src="/media/images/default-no-image.jpg">
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card top-spaced">
+    <div class="card-body">
+        Доставка
+        <hr/>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-check">
+                    <input checked class="form-check-input" id="exampleRadios1" name="exampleRadios"
+                           type="radio" value="option1">
+                    <label class="form-check-label" for="exampleRadios1">
+                        Самовивіз з міста {{advert.get_advert_address.city}}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" id="exampleRadios2" name="exampleRadios" type="radio"
+                           value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        Доставка "Нова пошта"
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" id="exampleRadios3" name="exampleRadios" type="radio"
+                           value="option2">
+                    <label class="form-check-label" for="exampleRadios3">
+                        Кур'єр "Нова пошта"
+                    </label>
+                </div>
+                <form id=delivery-np class="top-spaced hidden">
+                    <input class="form-control top-spaced" placeholder="Область" type="text">
+                    <input class="form-control top-spaced" placeholder="Місто" type="text">
+                    <input class="form-control top-spaced w-40" placeholder="№ відділення" type="text">
+                </form>
+                <form id=courier-np class="top-spaced hidden">
+                    <input class="form-control top-spaced" placeholder="Область" type="text">
+                    <input class="form-control top-spaced" placeholder="Місто" type="text">
+                    <input class="form-control top-spaced w-40" placeholder="№ будинку" type="text">
+                    <input class="form-control top-spaced w-40" placeholder="№ квартири" type="text">
+                </form>
+            </div>
+            <div class="col-6">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

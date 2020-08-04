@@ -4,15 +4,15 @@
 <h1> {{ category.name }}</h1>
 {% if not advert_list.count %}
 <h2 class="text-center">
-    Не знайдено результатів
+    На жаль, не вдалось знайти результатів
 </h2>
 <div class="text-center">
     <span style='font-size:100px;'>&#128550;</span>
 </div>
 {% else %}
 <h2 class="text-center"> Знайдено оголошень: {{advert_list.count}} </h2>
-{% endif %}
 <hr/>
+{% endif %}
 <!-- Search form -->
 {% if advert_list.count %}
 <div class="row d-flex justify-content-center">
@@ -21,34 +21,5 @@
     </div>
 </div>
 {% endif %}
-<div class="row">
-    {% for advert in advert_list %}
-
-    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <div class="card card-spaced w-100 " style="width: 18rem;">
-            <div class="card-img-container">
-                {% if advert.get_cover_photo %}
-                <img alt="..." class="card-img-top" src="{{ advert.get_cover_photo }}">
-                {% else %}
-                <img alt="..." class="card-img-top" src="/media/images/default-no-image.jpg">
-                {% endif %}
-            </div>
-            <div class="card-body">
-                <h5 class="card-title"><a href="/advert/{{advert.pk}}">{{ advert.title }}</a></h5>
-                <div class="row">
-                    <div class="col-8">
-                        <p class="font-weight-light">{{ advert.date_published }}</p>
-                    </div>
-                    <div class="col-4 text-right">
-                        <span class="badge badge-danger">
-                            Views: <span class="badge badge-light">{{ advert.views }}</span>
-                        </span>
-                    </div>
-                </div>
-                <b>{{advert.price}} грн</b>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-    {% endblock content %}
-</div>
+{% include 'include/adverts_list.html' with advert_list=advert_list %}
+{% endblock content %}

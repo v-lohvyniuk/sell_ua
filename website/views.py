@@ -42,7 +42,7 @@ class CategoryAdvertListView(HeaderAwareListView):
 
     def get_queryset(self):
         query_url = self.kwargs["url"]
-        if "root" in  query_url:
+        if "root" in query_url:
             return Advert.objects.all()
         else:
             category = Category.objects.get(url=query_url)
@@ -55,3 +55,8 @@ class CategoryAdvertListView(HeaderAwareListView):
             result_set.add(category)
             self.get_all_descendants(category, result_set)
         return result_set
+
+
+class CheckoutDeliveryView(DetailView):
+    model = Advert
+    template_name = 'website/payment-delivery.html'
