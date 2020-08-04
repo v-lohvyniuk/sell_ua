@@ -21,6 +21,11 @@ class AdvertDetailsView(HeaderAwareDetailView):
     model = Advert
     extra_context = {"category_root": Category.objects.get(url="root")}
 
+    def get(self, request, *args, **kwargs):
+        advert = self.get_object()
+        Advert.objects.filter(pk=advert.pk).update(views=advert.views + 1)
+        return super().get(request, args, kwargs)
+
 
 class CategoryAdvertListView(HeaderAwareListView):
 
