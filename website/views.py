@@ -29,9 +29,9 @@ class CategoryAdvertListView(HeaderAwareListView):
     template_name = "website/category.html"
 
     def get_context_data(self, *, object_list=None,  **kwargs):
-        # get standard context data
+        # get default impl
         context_data = super(CategoryAdvertListView, self).get_context_data(object_list=None, kwargs=kwargs)
-        # populate category info
+        # extend with category info
         context_data['category'] = Category.objects.get(url=self.kwargs["url"])
         return context_data
 
@@ -41,4 +41,12 @@ class CategoryAdvertListView(HeaderAwareListView):
             return Advert.objects.all()
         else:
             category = Category.objects.get(url=query_url)
-            return Advert.objects.filter(category=category)
+            self_and_descendants = self.get_all_descendants(category, set())
+            self_and_descendants.add(category)
+            return Advert.objects.filter(category__in=self_and_descendants)
+
+    def get_all_descendants(self, category, result_set):
+        for category in category.category_set.all():
+            result_set.add(category)
+            self.get_all_descendants(category, result_set)
+        return result_set
