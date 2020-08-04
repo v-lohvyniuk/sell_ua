@@ -51,7 +51,7 @@
                 <li class="list-group-item"> Розміщено {{advert.date_published}}</li>
                 <li class="list-group-item">Місто: {{advert.get_advert_address.city}}</li>
                 <li class="list-group-item">
-                    <button class="btn btn-success w-100" type="button"><a href="{% url 'checkout' advert.pk %}">Купити</a></button>
+                    <a href="{% url 'checkout' advert.pk %}" class="btn btn-success d-block">Купити</a>
                 </li>
             </ul>
         </div>
