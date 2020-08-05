@@ -1,6 +1,3 @@
-import os
-
-from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
@@ -111,3 +108,39 @@ class SellerFeedback(models.Model):
     class Meta:
         verbose_name = "Відгук"
         verbose_name_plural = "Відгуки"
+
+
+class DeliveryType(models.Model):
+    name = models.CharField(max_length=15)
+
+    class Meta:
+        verbose_name = "Тип доставки"
+        verbose_name_plural = "Типи доставки"
+
+    @staticmethod
+    def for_name(name):
+        return DeliveryType.objects.get(name=name)
+
+
+class ContactInfo(models.Model):
+
+    email = models.EmailField()
+    phone = models.CharField("Телефон", max_length=15)
+
+    class Meta:
+        verbose_name = "Контактна інформація"
+        verbose_name_plural = "Контактна інформація"
+
+
+class Order(models.Model):
+
+    buyer = models.ForeignKey(verbose_name="Покупець", to=User, null=True, on_delete=models.SET_NULL, related_name="seller")
+    is_anonymous_sale = models.BooleanField(default=False)
+    delivery_type = models.ForeignKey(verbose_name="Тип доставки", null=True, to=DeliveryType, on_delete=models.SET_NULL)
+    delivery_address = models.ForeignKey(verbose_name="Адреса доставки", on_delete=models.SET_NULL, to=UserAddress, null=True)
+    contact_info = models.ForeignKey(verbose_name="Контактна інформація", on_delete=models.SET_NULL, to=ContactInfo, null=True)
+    advert = models.ForeignKey(verbose_name="Оголошення", to=Advert, on_delete=models.SET_NULL, null=True)
+
+    def get_seller(self):
+        return self.advert.owner.get()
+

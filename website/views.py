@@ -1,7 +1,10 @@
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
 
 from .forms import DeliveryTypeForm, DeliveryAddressForm, ContactInfoForm
-from .models import Advert, Category
+from .models import Advert, Category, Order, DeliveryType, ContactInfo
 
 
 class HeaderAwareListView(ListView):
@@ -65,9 +68,19 @@ class PaymentDeliveryView(DetailView):
         "contact_info_form": ContactInfoForm()
     }
 
+
 def payment_delivery_submit(request, pk):
     if request.method == 'POST':
         delivery_type = DeliveryTypeForm(request.POST)
-        pass
-    pass
+        # delivery_Address = DeliveryAddressForm(request.POST)
+        contact_info = ContactInfoForm(request.POST)
+        order = Order()
+        if delivery_type.data['delivery_type'] == 'self':
+            order.delivery_type = DeliveryType.for_name('self')
+            order.is_anonymous_sale = True
+            order.contact_info = ContactInfo.objects.get_or_create(email=contact_info.data['email'], phone=contact_info.data['phone'])[0]
+            order.advert = Advert.objects.get(pk=pk)
+            order.save()
+    return redirect(to='home')
+
 

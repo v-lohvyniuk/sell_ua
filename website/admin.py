@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline
 
-from .models import Advert, SellerFeedback, Category, UserAddress, AdvertPhoto, User
+from .models import Advert, SellerFeedback, Category, UserAddress, AdvertPhoto, User, Order, DeliveryType
 
 
 class UserAddressAdmin(ModelAdmin):
     list_display = ['owner', 'city', 'street', 'building_number']
+
+
+class DeliveryTypeAdmin(ModelAdmin):
+    list_display = ['name']
 
 
 class AddressInline(TabularInline):
@@ -35,4 +39,7 @@ admin.site.register(User, UserAdmin)
 admin.site.register(UserAddress, UserAddressAdmin)
 admin.site.register(SellerFeedback)
 admin.site.register(Category)
+admin.site.register(Order)
+admin.site.register(DeliveryType, DeliveryTypeAdmin)
+
 
