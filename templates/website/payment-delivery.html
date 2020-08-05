@@ -5,22 +5,22 @@
 <hr/>
 <div class="card">
     <div class="card-body">
-        Деталі оголошення
+        <h4>1. Деталі оголошення</h4>
         <hr/>
         <div class="row">
             <div class="col-8">
                 <div class="row top-spaced">
                     <div class="col-md-9">
                         <dl class="row">
-                            <dt class="col-sm-3">Номер оголошення</dt>
-                            <dd class="col-sm-9">{{advert.pk}}</dd>
+                            <dt class="col-sm-4">Номер оголошення</dt>
+                            <dd class="col-sm-8">{{advert.pk}}</dd>
 
-                            <dt class="col-sm-3">Продавець</dt>
-                            <dd class="col-sm-9">
+                            <dt class="col-sm-4">Продавець</dt>
+                            <dd class="col-sm-8">
                                 {{advert.owner}}
                             </dd>
-                            <dt class="col-sm-3">Місто</dt>
-                            <dd class="col-sm-9">
+                            <dt class="col-sm-4">Місто</dt>
+                            <dd class="col-sm-8">
                                 {{advert.get_advert_address.city}}
                             </dd>
                         </dl>
@@ -42,49 +42,52 @@
         </div>
     </div>
 </div>
-<div class="card top-spaced">
-    <div class="card-body">
-        Доставка
-        <hr/>
-        <div class="row">
-            <div class="col-4">
-                <div class="form-check">
-                    <input checked class="form-check-input" id="exampleRadios1" name="exampleRadios"
-                           type="radio" value="option1">
-                    <label class="form-check-label" for="exampleRadios1">
-                        Самовивіз з міста {{advert.get_advert_address.city}}
-                    </label>
+<form action="{% url 'checkout-submit' advert.pk %}" method="post">
+    {% csrf_token %}
+    <div class="card top-spaced">
+        <div class="card-body">
+            <h4>2. Доставка</h4>
+            <hr/>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-wrapper">
+                        <h5>Спосіб доставки</h5>
+                        <div id="delivery_type">
+                            {{delivery_type_form}}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="exampleRadios2" name="exampleRadios" type="radio"
-                           value="option2">
-                    <label class="form-check-label" for="exampleRadios2">
-                        Доставка "Нова пошта"
-                    </label>
+                <div class="col-4">
+                    <div class="form-wrapper">
+                        <h5>Адреса доставки</h5>
+                        <p id="self-delivery-label">Самовивіз з міста {{ advert.get_advert_address.city }}</p>
+                        <div class="hidden" id="delivery_address">
+                            {{delivery_address_form}}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="exampleRadios3" name="exampleRadios" type="radio"
-                           value="option2">
-                    <label class="form-check-label" for="exampleRadios3">
-                        Кур'єр "Нова пошта"
-                    </label>
+                <div class="col-4">
+                    <h5>Контактна інформація</h5>
+                    <div id="contact_info">
+                        {{contact_info_form}}
+                    </div>
                 </div>
-                <form id=delivery-np class="top-spaced hidden">
-                    <input class="form-control top-spaced" placeholder="Область" type="text">
-                    <input class="form-control top-spaced" placeholder="Місто" type="text">
-                    <input class="form-control top-spaced w-40" placeholder="№ відділення" type="text">
-                </form>
-                <form id=courier-np class="top-spaced hidden">
-                    <input class="form-control top-spaced" placeholder="Область" type="text">
-                    <input class="form-control top-spaced" placeholder="Місто" type="text">
-                    <input class="form-control top-spaced w-40" placeholder="№ будинку" type="text">
-                    <input class="form-control top-spaced w-40" placeholder="№ квартири" type="text">
-                </form>
-            </div>
-            <div class="col-6">
-
             </div>
         </div>
     </div>
-</div>
+    <div class="card top-spaced">
+        <div class="card-body">
+            <h4>3. Оплата</h4>
+            <hr/>
+            Оплата відбувається при отриманні замовлення
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-secondary top-spaced w-15" type="button">Назад до замовлення</button>
+        <button class="btn btn-success top-spaced w-15" name="list" type="submit">Далі</input>
+    </div>
+
+</form>
+
 {% endblock content %}

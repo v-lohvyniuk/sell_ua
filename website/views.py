@@ -1,4 +1,6 @@
 from django.views.generic import ListView, DetailView
+
+from .forms import DeliveryTypeForm, DeliveryAddressForm, ContactInfoForm
 from .models import Advert, Category
 
 
@@ -11,13 +13,11 @@ class HeaderAwareDetailView(DetailView):
 
 
 class HomePageView(HeaderAwareListView):
-
     model = Advert
     template_name = "website/home.html"
 
 
 class AdvertDetailsView(HeaderAwareDetailView):
-
     model = Advert
     extra_context = {"category_root": Category.objects.get(url="root")}
 
@@ -28,12 +28,11 @@ class AdvertDetailsView(HeaderAwareDetailView):
 
 
 class CategoryAdvertListView(HeaderAwareListView):
-
     model = Advert
     slug_field = "url"
     template_name = "website/category.html"
 
-    def get_context_data(self, *, object_list=None,  **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         # get default impl
         context_data = super(CategoryAdvertListView, self).get_context_data(object_list=None, kwargs=kwargs)
         # extend with category info
@@ -57,6 +56,18 @@ class CategoryAdvertListView(HeaderAwareListView):
         return result_set
 
 
-class CheckoutDeliveryView(DetailView):
+class PaymentDeliveryView(DetailView):
     model = Advert
     template_name = 'website/payment-delivery.html'
+    extra_context = {
+        "delivery_type_form": DeliveryTypeForm(),
+        "delivery_address_form": DeliveryAddressForm(),
+        "contact_info_form": ContactInfoForm()
+    }
+
+def payment_delivery_submit(request, pk):
+    if request.method == 'POST':
+        delivery_type = DeliveryTypeForm(request.POST)
+        pass
+    pass
+
