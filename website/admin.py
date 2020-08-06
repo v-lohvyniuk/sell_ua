@@ -25,7 +25,7 @@ class AdvertPhotoInline(TabularInline):
 class AdvertAdmin(ModelAdmin):
     fieldsets = [
         ("Загальне", {"fields": ['title', 'owner', 'price', 'category', 'description', 'address']}),
-        ("Адміністрування", {"fields": ['is_price_final', 'is_draft', 'is_reviewed', 'is_canceled']}),
+        ("Адміністрування", {"fields": ['is_price_final', 'status']}),
     ]
     inlines = [AdvertPhotoInline]
 

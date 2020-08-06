@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView
 
 from .forms import DeliveryTypeForm, DeliveryAddressForm, ContactInfoForm
-from .models import Advert, Category, Order, DeliveryType, ContactInfo
+from .models import Advert, Category, Order, DeliveryType, ContactInfo, AdvertStatus, OrderStatus
 
 
 class HeaderAwareListView(ListView):
@@ -80,6 +80,9 @@ def payment_delivery_submit(request, pk):
             order.is_anonymous_sale = True
             order.contact_info = ContactInfo.objects.get_or_create(email=contact_info.data['email'], phone=contact_info.data['phone'])[0]
             order.advert = Advert.objects.get(pk=pk)
+            order.advert.status = AdvertStatus.objects.get(label="ADVERT_RESERVED")
+            order.advert.save()
+            order.status = OrderStatus.objects.get(label="ORDER_CREATED")
             order.save()
     return redirect(to='home')
 

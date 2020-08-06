@@ -69,13 +69,10 @@ class Advert(models.Model):
     description = models.TextField("Опис", max_length=1000)
     price = models.DecimalField("Ціна", decimal_places=2, max_digits=10)
     is_price_final = models.BooleanField(default=False)
-    is_draft = models.BooleanField(default=True)
-    is_reviewed = models.BooleanField(default=False)
-    is_canceled = models.BooleanField(default=False)
+    status = models.ForeignKey(verbose_name="Статус", to=AdvertStatus, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категорія")
     views = models.PositiveIntegerField("Перегляди", default=0)
     address = models.ForeignKey(verbose_name="Адреса відправлювача", to=UserAddress, on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.ForeignKey(verbose_name="Статус", to=AdvertStatus, on_delete=models.SET_NULL, null=True)
 
     def get_cover_photo(self):
         all = self.advertphoto_set.all()
@@ -91,6 +88,10 @@ class Advert(models.Model):
             return self.address
         else:
             return self.owner.useraddress_set.first()
+
+    def is_advert_active(self):
+        return self.status != None \
+               and self.status.label == "ADVERT_ACTIVE"
 
     def __str__(self):
         return f"{self.title} -  {self.owner} - {self.price}"
@@ -157,6 +158,7 @@ class OrderStatus(models.Model):
 
     def __str__(self):
         return self.label
+
     class Meta:
         verbose_name = "Статус"
         verbose_name_plural = "Статуси"
