@@ -49,6 +49,18 @@ class UserAddress(models.Model):
         verbose_name_plural = "Адреси"
 
 
+class AdvertStatus(models.Model):
+
+    label = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.label
+
+    class Meta:
+        verbose_name = "Статус"
+        verbose_name_plural = "Статуси"
+
+
 class Advert(models.Model):
 
     title = models.CharField("Заголовок", max_length=100)
@@ -63,6 +75,7 @@ class Advert(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категорія")
     views = models.PositiveIntegerField("Перегляди", default=0)
     address = models.ForeignKey(verbose_name="Адреса відправлювача", to=UserAddress, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.ForeignKey(verbose_name="Статус", to=AdvertStatus, on_delete=models.SET_NULL, null=True)
 
     def get_cover_photo(self):
         all = self.advertphoto_set.all()
@@ -113,6 +126,9 @@ class SellerFeedback(models.Model):
 class DeliveryType(models.Model):
     name = models.CharField(max_length=15)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Тип доставки"
         verbose_name_plural = "Типи доставки"
@@ -127,17 +143,32 @@ class ContactInfo(models.Model):
     email = models.EmailField()
     phone = models.CharField("Телефон", max_length=15)
 
+    def __str__(self):
+        return self.email
+
     class Meta:
         verbose_name = "Контактна інформація"
         verbose_name_plural = "Контактна інформація"
 
 
+class OrderStatus(models.Model):
+
+    label = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.label
+    class Meta:
+        verbose_name = "Статус"
+        verbose_name_plural = "Статуси"
+
+
 class Order(models.Model):
 
-    buyer = models.ForeignKey(verbose_name="Покупець", to=User, null=True, on_delete=models.SET_NULL, related_name="seller")
+    buyer = models.ForeignKey(verbose_name="Покупець", to=User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seller")
     is_anonymous_sale = models.BooleanField(default=False)
+    status = models.ForeignKey(verbose_name="Статус", to=OrderStatus, on_delete=models.SET_NULL, null=True)
     delivery_type = models.ForeignKey(verbose_name="Тип доставки", null=True, to=DeliveryType, on_delete=models.SET_NULL)
-    delivery_address = models.ForeignKey(verbose_name="Адреса доставки", on_delete=models.SET_NULL, to=UserAddress, null=True)
+    delivery_address = models.ForeignKey(verbose_name="Адреса доставки", on_delete=models.SET_NULL, to=UserAddress, null=True, blank=True)
     contact_info = models.ForeignKey(verbose_name="Контактна інформація", on_delete=models.SET_NULL, to=ContactInfo, null=True)
     advert = models.ForeignKey(verbose_name="Оголошення", to=Advert, on_delete=models.SET_NULL, null=True)
 
