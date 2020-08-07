@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h4>Історія замовлень</h4>
+{% include 'include/orders_list.html' with order_list=order_list %}
+{% endblock content %}

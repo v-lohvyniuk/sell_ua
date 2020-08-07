@@ -8,6 +8,10 @@ class UserAddressAdmin(ModelAdmin):
     list_display = ['owner', 'city', 'street', 'building_number']
 
 
+class OrderAdmin(ModelAdmin):
+    list_display = ['status', 'advert']
+
+
 class DeliveryTypeAdmin(ModelAdmin):
     list_display = ['name']
 
@@ -39,7 +43,7 @@ admin.site.register(User, UserAdmin)
 admin.site.register(UserAddress, UserAddressAdmin)
 admin.site.register(SellerFeedback)
 admin.site.register(Category)
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)
 admin.site.register(DeliveryType, DeliveryTypeAdmin)
 
 

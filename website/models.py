@@ -49,8 +49,15 @@ class UserAddress(models.Model):
         verbose_name_plural = "Адреси"
 
 
+class AdvertStatusManager(models.Manager):
+
+    def get_by_label(self, label):
+        return self.get(label=label)
+
+
 class AdvertStatus(models.Model):
 
+    objects = AdvertStatusManager()
     label = models.CharField(max_length=25)
 
     def __str__(self):
@@ -75,8 +82,8 @@ class Advert(models.Model):
     address = models.ForeignKey(verbose_name="Адреса відправлювача", to=UserAddress, on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_cover_photo(self):
-        all = self.advertphoto_set.all()
-        if all:
+        all_images = self.advertphoto_set.all()
+        if all_images:
             if self.advertphoto_set.filter(is_cover_photo=True):
                 return self.advertphoto_set.filter(is_cover_photo=True).get().image.url
             else:
@@ -90,8 +97,12 @@ class Advert(models.Model):
             return self.owner.useraddress_set.first()
 
     def is_advert_active(self):
-        return self.status != None \
+        return self.status is not None \
                and self.status.label == "ADVERT_ACTIVE"
+
+    def set_reserved(self):
+        self.status = AdvertStatus.objects.get_by_label("ADVERT_RESERVED")
+        self.save()
 
     def __str__(self):
         return f"{self.title} -  {self.owner} - {self.price}"
@@ -152,9 +163,16 @@ class ContactInfo(models.Model):
         verbose_name_plural = "Контактна інформація"
 
 
+class OrderStatusManager(models.Manager):
+
+    def get_by_label(self, label):
+        return self.get(label=label)
+
+
 class OrderStatus(models.Model):
 
     label = models.CharField(max_length=25)
+    objects = OrderStatusManager()
 
     def __str__(self):
         return self.label
@@ -166,8 +184,9 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
 
-    buyer = models.ForeignKey(verbose_name="Покупець", to=User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seller")
-    is_anonymous_sale = models.BooleanField(default=False)
+    buyer = models.ForeignKey(verbose_name="Покупець", to=User, null=True, blank=True, on_delete=models.SET_NULL, related_name="buyer")
+    owner = models.ForeignKey(verbose_name="Продавець", to=User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seller")
+    is_anonymous_sale = models.BooleanField(default=True)
     status = models.ForeignKey(verbose_name="Статус", to=OrderStatus, on_delete=models.SET_NULL, null=True)
     delivery_type = models.ForeignKey(verbose_name="Тип доставки", null=True, to=DeliveryType, on_delete=models.SET_NULL)
     delivery_address = models.ForeignKey(verbose_name="Адреса доставки", on_delete=models.SET_NULL, to=UserAddress, null=True, blank=True)
@@ -177,3 +196,15 @@ class Order(models.Model):
     def get_seller(self):
         return self.advert.owner.get()
 
+    def set_status_created(self):
+        self.status = OrderStatus.objects.get_by_label("ORDER_CREATED")
+        self.save()
+
+    def set_delivery(self, delivery_type, address):
+        self.delivery_type = delivery_type
+        self.delivery_address = address
+        self.save()
+
+    class Meta:
+        verbose_name = "Замовлення"
+        verbose_name_plural = "Замовлення"

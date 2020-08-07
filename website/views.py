@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 
 from .forms import DeliveryTypeForm, DeliveryAddressForm, ContactInfoForm
 from .models import Advert, Category, Order, DeliveryType, ContactInfo, AdvertStatus, OrderStatus
+from .services import PlaceOrderService, OrderService
 
 
 class HeaderAwareListView(ListView):
@@ -72,18 +73,20 @@ class PaymentDeliveryView(DetailView):
 def payment_delivery_submit(request, pk):
     if request.method == 'POST':
         delivery_type = DeliveryTypeForm(request.POST)
-        # delivery_Address = DeliveryAddressForm(request.POST)
         contact_info = ContactInfoForm(request.POST)
-        order = Order()
         if delivery_type.data['delivery_type'] == 'self':
-            order.delivery_type = DeliveryType.for_name('self')
-            order.is_anonymous_sale = True
-            order.contact_info = ContactInfo.objects.get_or_create(email=contact_info.data['email'], phone=contact_info.data['phone'])[0]
-            order.advert = Advert.objects.get(pk=pk)
-            order.advert.status = AdvertStatus.objects.get(label="ADVERT_RESERVED")
-            order.advert.save()
-            order.status = OrderStatus.objects.get(label="ORDER_CREATED")
-            order.save()
+            delivery_type = DeliveryType.for_name('self')
+            contact_info = \
+            ContactInfo.objects.get_or_create(email=contact_info.data['email'], phone=contact_info.data['phone'])[0]
+            advert = Advert.objects.get(pk=pk)
+            PlaceOrderService(delivery_type, None, contact_info, advert).place_order()
     return redirect(to='home')
 
 
+class OrderHistoryView(HeaderAwareListView):
+
+    model = Order
+    template_name = "website/order_history.html"
+
+    def get_queryset(self):
+        return OrderService.get_all_orders()
