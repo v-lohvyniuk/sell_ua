@@ -1,10 +1,11 @@
 $("input[value=self]").change(function(e){
-    $('form#delivery_address').addClass('hidden')
+    $('form #delivery_address').addClass('hidden')
+    $('p#self-delivery-label').removeClass  ('hidden')
 });
 
 $("input[value=delivery-np]").change(function(e){
+    $('form #delivery_address').removeClass('hidden')
     $('p#self-delivery-label').addClass('hidden')
-    $('form#delivery_address').removeClass('hidden')
 
     $('input#id_street').addClass('hidden')
 
@@ -21,7 +22,7 @@ $("input[value=delivery-np]").change(function(e){
 
 $("input[value=courier-np]").change(function(e){
     $('p#self-delivery-label').addClass('hidden')
-    $('form#delivery_address').removeClass('hidden')
+    $('form #delivery_address').removeClass('hidden')
 
     $('input#id_street').removeClass('hidden')
     $('label[for=id_street]').removeClass('hidden')

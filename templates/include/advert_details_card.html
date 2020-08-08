@@ -1,0 +1,39 @@
+<div class="card">
+    <div class="card-body">
+        <h4>1. Деталі оголошення</h4>
+        <hr/>
+        <div class="row">
+            <div class="col-8">
+                <div class="row top-spaced">
+                    <div class="col-md-9">
+                        <dl class="row">
+                            <dt class="col-sm-4">Номер оголошення</dt>
+                            <dd class="col-sm-8">{{advert.pk}}</dd>
+
+                            <dt class="col-sm-4">Продавець</dt>
+                            <dd class="col-sm-8">
+                                {{advert.owner}}
+                            </dd>
+                            <dt class="col-sm-4">Місто</dt>
+                            <dd class="col-sm-8">
+                                {{advert.get_advert_address.city}}
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card-img-container">
+                    {% if advert.get_cover_photo %}
+                    <img alt="..." class="card-img-top" src="{{ advert.get_cover_photo }}">
+                    {% else %}
+                    <img alt="..." class="card-img-top" src="/media/images/default-no-image.jpg">
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

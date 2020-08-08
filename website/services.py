@@ -18,6 +18,7 @@ class PlaceOrderService:
             order.set_delivery(self.delivery_type, self.address)
             order.contact_info = self.ci
             order.save()
+            return order
 
 
     def validate_data(self):

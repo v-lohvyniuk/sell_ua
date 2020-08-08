@@ -104,6 +104,10 @@ class Advert(models.Model):
         self.status = AdvertStatus.objects.get_by_label("ADVERT_RESERVED")
         self.save()
 
+    def increase_view_counter(self):
+        self.views = self.views + 1
+        self.save()
+
     def __str__(self):
         return f"{self.title} -  {self.owner} - {self.price}"
 

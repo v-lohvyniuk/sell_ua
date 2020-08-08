@@ -23,11 +23,10 @@ class HomePageView(HeaderAwareListView):
 
 class AdvertDetailsView(HeaderAwareDetailView):
     model = Advert
-    extra_context = {"category_root": Category.objects.get(url="root")}
 
     def get(self, request, *args, **kwargs):
         advert = self.get_object()
-        Advert.objects.filter(pk=advert.pk).update(views=advert.views + 1)
+        advert.increase_view_counter()
         return super().get(request, args, kwargs)
 
 
@@ -79,8 +78,14 @@ def payment_delivery_submit(request, pk):
             contact_info = \
             ContactInfo.objects.get_or_create(email=contact_info.data['email'], phone=contact_info.data['phone'])[0]
             advert = Advert.objects.get(pk=pk)
-            PlaceOrderService(delivery_type, None, contact_info, advert).place_order()
-    return redirect(to='home')
+            order = PlaceOrderService(delivery_type, None, contact_info, advert).place_order()
+            return redirect(to='order-confirmation', pk=order.pk)
+
+
+class OrderConfirmationView(HeaderAwareDetailView):
+
+    model = Order
+    template_name = "website/order_confirmation.html"
 
 
 class OrderHistoryView(HeaderAwareListView):

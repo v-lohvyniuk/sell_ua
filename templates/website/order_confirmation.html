@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h4> Thank you for your order !</h4>
+<hr/>
+{% include 'include/advert_details_card.html' with advert=order.advert %}
+{% endblock content %}
