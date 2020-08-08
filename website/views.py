@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView
 
 from .forms import DeliveryTypeForm, DeliveryAddressForm, ContactInfoForm
 from .models import Advert, Category, Order, DeliveryType, ContactInfo, AdvertStatus, OrderStatus
-from .services import PlaceOrderService, OrderService
+from .services import PlaceOrderService, OrderService, CategoryService, AdvertService
 
 
 class HeaderAwareListView(ListView):
@@ -45,18 +45,10 @@ class CategoryAdvertListView(HeaderAwareListView):
     def get_queryset(self):
         query_url = self.kwargs["url"]
         if "root" in query_url:
-            return Advert.objects.all()
+            return AdvertService.get_active_adverts()
         else:
-            category = Category.objects.get(url=query_url)
-            self_and_descendants = self.get_all_descendants(category, set())
-            self_and_descendants.add(category)
-            return Advert.objects.filter(category__in=self_and_descendants)
-
-    def get_all_descendants(self, category, result_set):
-        for category in category.category_set.all():
-            result_set.add(category)
-            self.get_all_descendants(category, result_set)
-        return result_set
+            self_and_descendants = CategoryService.get_category_and_descendants(query_url)
+            return AdvertService.get_active_adverts_for_categories(category_list=self_and_descendants)
 
 
 class PaymentDeliveryView(DetailView):
