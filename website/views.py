@@ -9,11 +9,13 @@ from .services import PlaceOrderService, OrderService, CategoryService, AdvertSe
 
 
 class HeaderAwareListView(ListView):
-    extra_context = {"category_root": Category.objects.get(url="root")}
+    pass
+    # extra_context = {"category_root": Category.objects.get(url="root")}
 
 
 class HeaderAwareDetailView(DetailView):
-    extra_context = {"category_root": Category.objects.get(url="root")}
+    pass
+    # extra_context = {"category_root": Category.objects.get(url="root")}
 
 
 class HomePageView(HeaderAwareListView):

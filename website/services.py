@@ -1,4 +1,4 @@
-from website.models import DeliveryType, UserAddress, ContactInfo, Advert, Order, User, Category, AdvertStatus
+from website.models import DeliveryType, UserAddress, ContactInfo, Advert, Order, WebsiteUser, Category, AdvertStatus
 
 
 class PlaceOrderService:
@@ -27,7 +27,7 @@ class PlaceOrderService:
 class OrderService:
 
     @staticmethod
-    def get_orders_for_user(user: User):
+    def get_orders_for_user(user: WebsiteUser):
         return Order.objects.filter(buyer=user)
 
     @staticmethod
@@ -54,7 +54,8 @@ class CategoryService:
 
 class AdvertService:
 
-    ADVERT_STATUS_ACTIVE = AdvertStatus.objects.get_by_label("ADVERT_ACTIVE")
+    ADVERT_STATUS_ACTIVE = None
+    # ADVERT_STATUS_ACTIVE = AdvertStatus.objects.get_by_label("ADVERT_ACTIVE")
 
     @staticmethod
     def get_active_adverts_for_categories(category_list):

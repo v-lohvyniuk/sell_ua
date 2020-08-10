@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -19,10 +20,7 @@ class Category(models.Model):
         return reverse("category", args=[self.url])
 
 
-class User(models.Model):
-
-    first_name = models.CharField("Ім'я", max_length=50)
-    last_name = models.CharField("Прізвище", max_length=50)
+class WebsiteUser(User):
     reg_date = models.DateField("Дата реєстрації", auto_now=True)
     phone = models.CharField("Номер телефону", max_length=13)
     is_show_phone = models.BooleanField("Показувати телефон", default=False)
@@ -37,7 +35,7 @@ class User(models.Model):
 
 class UserAddress(models.Model):
 
-    owner = models.ForeignKey(verbose_name="Користувач", to=User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(verbose_name="Користувач", to=WebsiteUser, on_delete=models.CASCADE)
     region = models.CharField("Область", max_length=50)
     city = models.CharField("Місто", max_length=50)
     street = models.CharField("Вулиця", max_length=50)
@@ -71,7 +69,7 @@ class AdvertStatus(models.Model):
 class Advert(models.Model):
 
     title = models.CharField("Заголовок", max_length=100)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Власник")
+    owner = models.ForeignKey(WebsiteUser, on_delete=models.CASCADE, verbose_name="Власник")
     date_published = models.DateTimeField("Дата публікації", auto_now=True)
     description = models.TextField("Опис", max_length=1000)
     price = models.DecimalField("Ціна", decimal_places=2, max_digits=10)
@@ -130,8 +128,8 @@ class AdvertPhoto(models.Model):
 
 class SellerFeedback(models.Model):
 
-    seller = models.ForeignKey(verbose_name="Продавець", to=User, on_delete=models.CASCADE, related_name="seller_for_feedback")
-    user = models.ForeignKey(verbose_name="Користувач", to=User, on_delete=models.SET_NULL, null=True)
+    seller = models.ForeignKey(verbose_name="Продавець", to=WebsiteUser, on_delete=models.CASCADE, related_name="seller_for_feedback")
+    user = models.ForeignKey(verbose_name="Користувач", to=WebsiteUser, on_delete=models.SET_NULL, null=True)
     mark = models.PositiveSmallIntegerField("Оцінка (0-5)")
 
     class Meta:
@@ -188,8 +186,8 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
 
-    buyer = models.ForeignKey(verbose_name="Покупець", to=User, null=True, blank=True, on_delete=models.SET_NULL, related_name="buyer")
-    owner = models.ForeignKey(verbose_name="Продавець", to=User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seller")
+    buyer = models.ForeignKey(verbose_name="Покупець", to=WebsiteUser, null=True, blank=True, on_delete=models.SET_NULL, related_name="buyer")
+    owner = models.ForeignKey(verbose_name="Продавець", to=WebsiteUser, null=True, blank=True, on_delete=models.SET_NULL, related_name="seller")
     is_anonymous_sale = models.BooleanField(default=True)
     status = models.ForeignKey(verbose_name="Статус", to=OrderStatus, on_delete=models.SET_NULL, null=True)
     delivery_type = models.ForeignKey(verbose_name="Тип доставки", null=True, to=DeliveryType, on_delete=models.SET_NULL)

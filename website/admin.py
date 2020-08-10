@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline
 
-from .models import Advert, SellerFeedback, Category, UserAddress, AdvertPhoto, User, Order, DeliveryType
+from .models import Advert, SellerFeedback, Category, UserAddress, AdvertPhoto, WebsiteUser, Order, DeliveryType
 
 
 class UserAddressAdmin(ModelAdmin):
@@ -39,7 +39,7 @@ class UserAdmin(ModelAdmin):
 
 
 admin.site.register(Advert, AdvertAdmin)
-admin.site.register(User, UserAdmin)
+admin.site.register(WebsiteUser, UserAdmin)
 admin.site.register(UserAddress, UserAddressAdmin)
 admin.site.register(SellerFeedback)
 admin.site.register(Category)
