@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -8,14 +9,19 @@ from .models import Advert, Category, Order, DeliveryType, ContactInfo, AdvertSt
 from .services import PlaceOrderService, OrderService, CategoryService, AdvertService
 
 
+class LoginRequiredMixin(object):
+
+    @classmethod
+    def as_view(cls):
+        return login_required(super(LoginRequiredMixin, cls).as_view(), login_url='/login')
+
+
 class HeaderAwareListView(ListView):
-    pass
-    # extra_context = {"category_root": Category.objects.get(url="root")}
+    extra_context = {"category_root": Category.objects.get(url="root")}
 
 
 class HeaderAwareDetailView(DetailView):
-    pass
-    # extra_context = {"category_root": Category.objects.get(url="root")}
+    extra_context = {"category_root": Category.objects.get(url="root")}
 
 
 class HomePageView(HeaderAwareListView):
@@ -53,7 +59,7 @@ class CategoryAdvertListView(HeaderAwareListView):
             return AdvertService.get_active_adverts_for_categories(category_list=self_and_descendants)
 
 
-class PaymentDeliveryView(DetailView):
+class PaymentDeliveryView(LoginRequiredMixin, DetailView):
     model = Advert
     template_name = 'website/payment-delivery.html'
     extra_context = {
@@ -63,6 +69,7 @@ class PaymentDeliveryView(DetailView):
     }
 
 
+@login_required(login_url='/login')
 def payment_delivery_submit(request, pk):
     if request.method == 'POST':
         delivery_type = DeliveryTypeForm(request.POST)
